@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-public class InvoiceGenerator {
+public class InvoiceEmailer {
 
     public void createInvoice() throws IOException, MessagingException {
         //Load configuration
