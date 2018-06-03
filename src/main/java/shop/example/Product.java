@@ -6,8 +6,8 @@ import javax.persistence.*;
 public class Product {
 
     public static final int BOOK = 1;
-    public static final int PHONE = 1;
-    public static final int WATCH = 1;
+    public static final int PHONE = 2;
+    public static final int WATCH = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
