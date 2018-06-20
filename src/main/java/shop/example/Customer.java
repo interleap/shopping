@@ -1,22 +1,17 @@
 package shop.example;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String email;
     private String address;
 
-    @OneToMany(targetEntity = PurchaseOrder.class, mappedBy = "customer")
     private List<PurchaseOrder> purchaseOrders;
 
     protected Customer(){}
