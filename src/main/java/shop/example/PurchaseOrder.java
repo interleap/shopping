@@ -1,14 +1,20 @@
 package shop.example;
 
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
 public class PurchaseOrder {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date date;
 
+    @JoinColumn(name = "PRODUCT_ID")
     private Product product;
     private int quantity;
+    @ManyToOne
     private Customer customer;
 
     protected PurchaseOrder(){}

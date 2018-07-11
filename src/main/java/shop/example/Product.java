@@ -1,11 +1,16 @@
 package shop.example;
 
+import javax.persistence.*;
+
+@Entity
 public class Product {
 
     public static final int BOOK = 1;
     public static final int PHONE = 2;
     public static final int WATCH = 3;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int productType;
     private String name;
