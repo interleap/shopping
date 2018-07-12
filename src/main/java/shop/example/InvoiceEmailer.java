@@ -43,7 +43,7 @@ public class InvoiceEmailer {
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(customer.getEmail(), false));
             msg.setSubject("Daily PurchaseOrder Summary");
-            msg.setText(InvoiceController.dailyOrderSummary(customer));
+            msg.setText(OrderSummaryController.dailyOrderSummary(customer));
             msg.setSentDate(new Date());
             SMTPTransport t =
                     (SMTPTransport) session.getTransport("smtp");

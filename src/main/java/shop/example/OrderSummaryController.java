@@ -3,7 +3,7 @@ package shop.example;
 import java.util.Calendar;
 import java.util.Date;
 
-public class InvoiceController {
+public class OrderSummaryController {
 
 
     public static String dailyOrderSummary(Customer customer){
