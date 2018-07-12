@@ -2,15 +2,11 @@ package shop.example;
 
 import com.sun.mail.smtp.SMTPTransport;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -20,20 +16,13 @@ import java.util.Properties;
 public class InvoiceEmailer {
 
     public void createInvoice() throws IOException, MessagingException {
+        List<Customer> customers = new CustomerDao().all();
+
         //Load configuration
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream("shopping.properties");
         Properties properties = new Properties();
         properties.load(stream);
         stream.close();
-
-        //Database entity manager
-        String persistenceUnitName = properties.getProperty("persistence-unit.name");
-        EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
-        EntityManager em = emFactory.createEntityManager();
-
-        Query query = em.createQuery("SELECT c FROM Customer c");
-        List<Customer> customers = query.getResultList();
-
 
         for(Customer customer:customers){
 
