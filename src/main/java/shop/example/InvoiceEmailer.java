@@ -16,7 +16,9 @@ import java.util.Properties;
 public class InvoiceEmailer {
 
     public void createInvoice() throws IOException, MessagingException {
-        List<Customer> customers = new CustomerDao().all();
+        CustomerDao cdo = new CustomerDao();
+        OrderSummaryController con = new OrderSummaryController();
+        List<Customer> customers = cdo.all();
 
         //Load configuration
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream("shopping.properties");
@@ -32,7 +34,7 @@ public class InvoiceEmailer {
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(customer.getEmail(), false));
             msg.setSubject("Daily PurchaseOrder Summary");
-            msg.setText(OrderSummaryController.dailyOrderSummary(customer));
+            msg.setText(con.dailyOrderSummary(customer.getId()));
             msg.setSentDate(new Date());
             SMTPTransport t =
                     (SMTPTransport) session.getTransport("smtp");

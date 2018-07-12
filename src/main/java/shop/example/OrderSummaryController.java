@@ -1,12 +1,15 @@
 package shop.example;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
 public class OrderSummaryController {
 
+    private CustomerDao customerDao = new CustomerDao();
 
-    public static String dailyOrderSummary(Customer customer){
+    public String dailyOrderSummary(Long customerId) throws IOException {
+        Customer customer = customerDao.customerById(customerId);
         double totalAmount = 0;
         String sm = "-------------\n";
         sm += "Dear "+ customer.getName() +", Here is your order summary for the day \n";

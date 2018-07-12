@@ -45,4 +45,8 @@ public class Customer {
     public List<PurchaseOrder> getPurchaseOrders() {
         return purchaseOrders;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

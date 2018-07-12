@@ -5,11 +5,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CustomerTest {
+public class OrderSummaryControllerTest {
+
+    private OrderSummaryController orderSummaryController;
 
     @Before
     public void setup() {
@@ -52,14 +55,15 @@ public class CustomerTest {
     }
 
     @Test
-    public void testMyCustomer(){
+    public void testMyCustomer() throws IOException {
         EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("product");
         EntityManager em = emFactory.createEntityManager();
         Query query = em.createQuery("SELECT c FROM Customer c");
         List<Customer> customers = query.getResultList();
 
         for (Customer customer : customers) {
-            System.out.println(OrderSummaryController.dailyOrderSummary(customer));
+            orderSummaryController = new OrderSummaryController();
+            System.out.println(orderSummaryController.dailyOrderSummary(customer.getId()));
         }
         em.close();
 

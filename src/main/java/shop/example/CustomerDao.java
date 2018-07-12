@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class CustomerDao {
 
-    public Customer customerById(int id) throws IOException {
+    public Customer customerById(Long id) throws IOException {
         InputStream stream = this.getClass().getClassLoader().getResourceAsStream("shopping.properties");
         Properties properties = new Properties();
         properties.load(stream);
