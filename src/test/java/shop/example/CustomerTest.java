@@ -59,7 +59,7 @@ public class CustomerTest {
         List<Customer> customers = query.getResultList();
 
         for (Customer customer : customers) {
-            System.out.println(customer.dailyOrderSummary());
+            System.out.println(InvoiceController.dailyOrderSummary(customer));
         }
         em.close();
 

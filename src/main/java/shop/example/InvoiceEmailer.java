@@ -2,7 +2,6 @@ package shop.example;
 
 import com.sun.mail.smtp.SMTPTransport;
 
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
@@ -44,7 +43,7 @@ public class InvoiceEmailer {
             msg.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(customer.getEmail(), false));
             msg.setSubject("Daily PurchaseOrder Summary");
-            msg.setText(customer.dailyOrderSummary());
+            msg.setText(InvoiceController.dailyOrderSummary(customer));
             msg.setSentDate(new Date());
             SMTPTransport t =
                     (SMTPTransport) session.getTransport("smtp");
