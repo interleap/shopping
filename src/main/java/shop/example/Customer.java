@@ -68,6 +68,14 @@ public class Customer {
     return currentDayList;
   }
 
+  public double getTotalProductAmount() {
+    double totalProductAmount = 0;
+    for (PurchaseOrder purchaseOrder : getCurrentDayPurchaseOrders()) {
+      totalProductAmount += purchaseOrder.getCost();
+    }
+    return totalProductAmount;
+  }
+
   public static Date removeTime(Date date) {
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);

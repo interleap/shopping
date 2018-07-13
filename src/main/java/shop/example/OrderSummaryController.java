@@ -1,8 +1,6 @@
 package shop.example;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
 public class OrderSummaryController {
 
@@ -14,7 +12,7 @@ public class OrderSummaryController {
     String orderSummary = getSummaryHeader(customer);
     double totalDeliveryAmount = 0;
 
-    double totalProductAmount = getTotalProductAmount(customer);
+    double totalProductAmount = customer.getTotalProductAmount();
 
     for (PurchaseOrder purchaseOrder : customer.getCurrentDayPurchaseOrders()) {
       Product product = purchaseOrder.getProduct();
@@ -38,27 +36,9 @@ public class OrderSummaryController {
     return orderSummary;
   }
 
-  private double getTotalProductAmount(Customer customer) {
-    double totalProductAmount = 0;
-    for (PurchaseOrder purchaseOrder : customer.getCurrentDayPurchaseOrders()) {
-      totalProductAmount += purchaseOrder.getCost();
-    }
-    return totalProductAmount;
-  }
-
   private String getSummaryHeader(Customer customer) {
     String orderSummary = "-------------\n";
     orderSummary += "Dear " + customer.getName() + ", Here is your order summary for the day \n";
     return orderSummary;
-  }
-
-  public static Date removeTime(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-    return cal.getTime();
   }
 }
