@@ -57,4 +57,8 @@ public class PurchaseOrder {
     }
     return amount;
   }
+
+  public int getCost() {
+    return product.getPrice() * getQuantity();
+  }
 }

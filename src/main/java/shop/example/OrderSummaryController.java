@@ -16,6 +16,7 @@ public class OrderSummaryController {
     double totalDeliveryAmount = 0;
 
     double totalProductAmount = getTotalProductAmount(customer.getPurchaseOrders());
+
     for (PurchaseOrder purchaseOrder : customer.getPurchaseOrders()) {
       if (removeTime(purchaseOrder.getDate())
           .equals(removeTime(Calendar.getInstance().getTime()))) {
@@ -23,8 +24,7 @@ public class OrderSummaryController {
         orderSummary += "..........\n";
         orderSummary += "Product: " + product.productDetails() + "\n";
         orderSummary += "Quantity: " + purchaseOrder.getQuantity() + "\n";
-        orderSummary +=
-            "Total Cost of Product: " + product.getPrice() * purchaseOrder.getQuantity() + "\n";
+        orderSummary += "Total Cost of Product: " + purchaseOrder.getCost() + "\n";
 
         int currentDeliveryAmount = purchaseOrder.getDeliveryCharges();
         if (currentDeliveryAmount > 0) {
@@ -47,8 +47,7 @@ public class OrderSummaryController {
     for (PurchaseOrder purchaseOrder : purchaseOrdersList) {
       if (removeTime(purchaseOrder.getDate())
           .equals(removeTime(Calendar.getInstance().getTime()))) {
-        Product product = purchaseOrder.getProduct();
-        totalProductAmount += product.getPrice() * purchaseOrder.getQuantity();
+        totalProductAmount += purchaseOrder.getCost();
       }
     }
     return totalProductAmount;
