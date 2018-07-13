@@ -6,52 +6,69 @@ import java.util.Date;
 
 public class OrderSummaryController {
 
-    private CustomerDao customerDao = new CustomerDao();
+  private CustomerDao customerDao = new CustomerDao();
 
-    public String dailyOrderSummary(Long customerId) throws IOException {
-        Customer customer = customerDao.customerById(customerId);
-        double totalAmount = 0;
-        String sm = "-------------\n";
-        sm += "Dear "+ customer.getName() +", Here is your order summary for the day \n";
+  public String dailyOrderSummary(Long customerId) throws IOException {
+    Customer customer = customerDao.customerById(customerId);
+    double totalAmount = 0;
+    String sm = "-------------\n";
+    sm += "Dear " + customer.getName() + ", Here is your order summary for the day \n";
+    double totalProductAmount = 0;
+    double totalDeliveryAmount = 0;
 
-        for(PurchaseOrder ord : customer.getPurchaseOrders()){
-            if(removeTime(ord.getDate()).equals(removeTime(Calendar.getInstance().getTime()))){
-                Product product = ord.getProduct();
-                sm += "..........\n";
-                sm += "Product: " + product.productDetails() + "\n";
-                sm += "Quantity: " + ord.getQuantity() + "\n";
-                sm += "Total Cost of Product: " + product.getPrice() * ord.getQuantity() + "\n";
-                totalAmount += product.getPrice() * ord.getQuantity();
-                if(product.getProductType()==2){
-                    sm += "Delivery Charges for this product: " + 20 + "\n";
-                    totalAmount += 20;
-                } else{
-                    if(ord.getQuantity() >= 5){
-                        sm += "Delivery Charges for this product: " + 50 + "\n";
-                        totalAmount += 50;
-                    } else {
-                        sm += "Delivery Charges for this product: " + 30 + "\n";
-                        totalAmount += 30;
-                    }
-                }
-            }
-        }
-
+    for (PurchaseOrder ord : customer.getPurchaseOrders()) {
+      if (removeTime(ord.getDate()).equals(removeTime(Calendar.getInstance().getTime()))) {
+        Product product = ord.getProduct();
         sm += "..........\n";
-        sm += "Your total amount: " + totalAmount + "\n";
-        sm += "Your registered address is: " + customer.getAddress() + "\n" ;
-        sm += "Kindly pay cash to the delivery officer." + "\n" ;
-        sm += "-------------\n\n\n";
-        return sm;
-    }
+        sm += "Product: " + product.productDetails() + "\n";
+        sm += "Quantity: " + ord.getQuantity() + "\n";
+        sm += "Total Cost of Product: " + product.getPrice() * ord.getQuantity() + "\n";
+        totalProductAmount += product.getPrice() * ord.getQuantity();
 
-    public static Date removeTime(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        int currentDeliveryAmount = calculateDeliveryCharges(ord);
+        if (currentDeliveryAmount > 0) {
+          sm += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
+          totalDeliveryAmount += currentDeliveryAmount;
+        }
+        /*
+         * if (product.getProductType() == 2) { sm += "Delivery Charges for this product: " + 20 +
+         * "\n"; totalDeliveryAmount += 20; } else { if (ord.getQuantity() >= 5) { sm +=
+         * "Delivery Charges for this product: " + 50 + "\n"; totalDeliveryAmount += 50; } else { sm
+         * += "Delivery Charges for this product: " + 30 + "\n"; totalDeliveryAmount += 30; } }
+         */
+      }
     }
+    totalAmount = totalProductAmount + totalDeliveryAmount;
+    sm += "..........\n";
+    sm += "Your total amount: " + totalAmount + "\n";
+    sm += "Your registered address is: " + customer.getAddress() + "\n";
+    sm += "Kindly pay cash to the delivery officer." + "\n";
+    sm += "-------------\n\n\n";
+    return sm;
+  }
+
+  public static Date removeTime(Date date) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    return cal.getTime();
+  }
+
+  private static int calculateDeliveryCharges(PurchaseOrder ord) {
+    Product product = ord.getProduct();
+    int amount = 0;
+    if (product.getProductType() == 2) {
+      amount = 20;
+    } else {
+      if (ord.getQuantity() >= 5) {
+        amount = 50;
+      } else {
+        amount = 30;
+      }
+    }
+    return amount;
+  }
 }
