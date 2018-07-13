@@ -3,7 +3,6 @@ package shop.example;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class OrderSummaryController {
 
@@ -15,22 +14,19 @@ public class OrderSummaryController {
     String orderSummary = getSummaryHeader(customer);
     double totalDeliveryAmount = 0;
 
-    double totalProductAmount = getTotalProductAmount(customer.getPurchaseOrders());
+    double totalProductAmount = getTotalProductAmount(customer);
 
-    for (PurchaseOrder purchaseOrder : customer.getPurchaseOrders()) {
-      if (removeTime(purchaseOrder.getDate())
-          .equals(removeTime(Calendar.getInstance().getTime()))) {
-        Product product = purchaseOrder.getProduct();
-        orderSummary += "..........\n";
-        orderSummary += "Product: " + product.productDetails() + "\n";
-        orderSummary += "Quantity: " + purchaseOrder.getQuantity() + "\n";
-        orderSummary += "Total Cost of Product: " + purchaseOrder.getCost() + "\n";
+    for (PurchaseOrder purchaseOrder : customer.getCurrentDayPurchaseOrders()) {
+      Product product = purchaseOrder.getProduct();
+      orderSummary += "..........\n";
+      orderSummary += "Product: " + product.productDetails() + "\n";
+      orderSummary += "Quantity: " + purchaseOrder.getQuantity() + "\n";
+      orderSummary += "Total Cost of Product: " + purchaseOrder.getCost() + "\n";
 
-        int currentDeliveryAmount = purchaseOrder.getDeliveryCharges();
-        if (currentDeliveryAmount > 0) {
-          orderSummary += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
-          totalDeliveryAmount += currentDeliveryAmount;
-        }
+      int currentDeliveryAmount = purchaseOrder.getDeliveryCharges();
+      if (currentDeliveryAmount > 0) {
+        orderSummary += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
+        totalDeliveryAmount += currentDeliveryAmount;
       }
     }
     totalAmount = totalProductAmount + totalDeliveryAmount;
@@ -42,13 +38,10 @@ public class OrderSummaryController {
     return orderSummary;
   }
 
-  private double getTotalProductAmount(List<PurchaseOrder> purchaseOrdersList) {
+  private double getTotalProductAmount(Customer customer) {
     double totalProductAmount = 0;
-    for (PurchaseOrder purchaseOrder : purchaseOrdersList) {
-      if (removeTime(purchaseOrder.getDate())
-          .equals(removeTime(Calendar.getInstance().getTime()))) {
-        totalProductAmount += purchaseOrder.getCost();
-      }
+    for (PurchaseOrder purchaseOrder : customer.getCurrentDayPurchaseOrders()) {
+      totalProductAmount += purchaseOrder.getCost();
     }
     return totalProductAmount;
   }
