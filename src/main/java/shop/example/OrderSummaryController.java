@@ -25,17 +25,11 @@ public class OrderSummaryController {
         sm += "Total Cost of Product: " + product.getPrice() * ord.getQuantity() + "\n";
         totalProductAmount += product.getPrice() * ord.getQuantity();
 
-        int currentDeliveryAmount = calculateDeliveryCharges(ord);
+        int currentDeliveryAmount = ord.getDeliveryCharges();
         if (currentDeliveryAmount > 0) {
           sm += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
           totalDeliveryAmount += currentDeliveryAmount;
         }
-        /*
-         * if (product.getProductType() == 2) { sm += "Delivery Charges for this product: " + 20 +
-         * "\n"; totalDeliveryAmount += 20; } else { if (ord.getQuantity() >= 5) { sm +=
-         * "Delivery Charges for this product: " + 50 + "\n"; totalDeliveryAmount += 50; } else { sm
-         * += "Delivery Charges for this product: " + 30 + "\n"; totalDeliveryAmount += 30; } }
-         */
       }
     }
     totalAmount = totalProductAmount + totalDeliveryAmount;
@@ -55,20 +49,5 @@ public class OrderSummaryController {
     cal.set(Calendar.SECOND, 0);
     cal.set(Calendar.MILLISECOND, 0);
     return cal.getTime();
-  }
-
-  private static int calculateDeliveryCharges(PurchaseOrder ord) {
-    Product product = ord.getProduct();
-    int amount = 0;
-    if (product.getProductType() == 2) {
-      amount = 20;
-    } else {
-      if (ord.getQuantity() >= 5) {
-        amount = 50;
-      } else {
-        amount = 30;
-      }
-    }
-    return amount;
   }
 }
