@@ -3,6 +3,7 @@ package shop.example;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class OrderSummaryController {
 
@@ -11,34 +12,52 @@ public class OrderSummaryController {
   public String dailyOrderSummary(Long customerId) throws IOException {
     Customer customer = customerDao.customerById(customerId);
     double totalAmount = 0;
-    String sm = "-------------\n";
-    sm += "Dear " + customer.getName() + ", Here is your order summary for the day \n";
-    double totalProductAmount = 0;
+    String orderSummary = getSummaryHeader(customer);
     double totalDeliveryAmount = 0;
 
-    for (PurchaseOrder ord : customer.getPurchaseOrders()) {
-      if (removeTime(ord.getDate()).equals(removeTime(Calendar.getInstance().getTime()))) {
-        Product product = ord.getProduct();
-        sm += "..........\n";
-        sm += "Product: " + product.productDetails() + "\n";
-        sm += "Quantity: " + ord.getQuantity() + "\n";
-        sm += "Total Cost of Product: " + product.getPrice() * ord.getQuantity() + "\n";
-        totalProductAmount += product.getPrice() * ord.getQuantity();
+    double totalProductAmount = getTotalProductAmount(customer.getPurchaseOrders());
+    for (PurchaseOrder purchaseOrder : customer.getPurchaseOrders()) {
+      if (removeTime(purchaseOrder.getDate())
+          .equals(removeTime(Calendar.getInstance().getTime()))) {
+        Product product = purchaseOrder.getProduct();
+        orderSummary += "..........\n";
+        orderSummary += "Product: " + product.productDetails() + "\n";
+        orderSummary += "Quantity: " + purchaseOrder.getQuantity() + "\n";
+        orderSummary +=
+            "Total Cost of Product: " + product.getPrice() * purchaseOrder.getQuantity() + "\n";
 
-        int currentDeliveryAmount = ord.getDeliveryCharges();
+        int currentDeliveryAmount = purchaseOrder.getDeliveryCharges();
         if (currentDeliveryAmount > 0) {
-          sm += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
+          orderSummary += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
           totalDeliveryAmount += currentDeliveryAmount;
         }
       }
     }
     totalAmount = totalProductAmount + totalDeliveryAmount;
-    sm += "..........\n";
-    sm += "Your total amount: " + totalAmount + "\n";
-    sm += "Your registered address is: " + customer.getAddress() + "\n";
-    sm += "Kindly pay cash to the delivery officer." + "\n";
-    sm += "-------------\n\n\n";
-    return sm;
+    orderSummary += "..........\n";
+    orderSummary += "Your total amount: " + totalAmount + "\n";
+    orderSummary += "Your registered address is: " + customer.getAddress() + "\n";
+    orderSummary += "Kindly pay cash to the delivery officer." + "\n";
+    orderSummary += "-------------\n\n\n";
+    return orderSummary;
+  }
+
+  private double getTotalProductAmount(List<PurchaseOrder> purchaseOrdersList) {
+    double totalProductAmount = 0;
+    for (PurchaseOrder purchaseOrder : purchaseOrdersList) {
+      if (removeTime(purchaseOrder.getDate())
+          .equals(removeTime(Calendar.getInstance().getTime()))) {
+        Product product = purchaseOrder.getProduct();
+        totalProductAmount += product.getPrice() * purchaseOrder.getQuantity();
+      }
+    }
+    return totalProductAmount;
+  }
+
+  private String getSummaryHeader(Customer customer) {
+    String orderSummary = "-------------\n";
+    orderSummary += "Dear " + customer.getName() + ", Here is your order summary for the day \n";
+    return orderSummary;
   }
 
   public static Date removeTime(Date date) {
