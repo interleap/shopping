@@ -48,10 +48,6 @@ public class Customer {
     return address;
   }
 
-  public List<PurchaseOrder> getPurchaseOrders() {
-    return purchaseOrders;
-  }
-
   public Long getId() {
     return id;
   }
@@ -69,11 +65,12 @@ public class Customer {
   }
 
   public double getTotalProductAmount() {
-    double totalProductAmount = 0;
-    for (PurchaseOrder purchaseOrder : getCurrentDayPurchaseOrders()) {
-      totalProductAmount += purchaseOrder.getCost();
-    }
-    return totalProductAmount;
+    return getCurrentDayPurchaseOrders().stream().mapToInt(purchase -> purchase.getCost()).sum();
+  }
+
+  public double getTotalDeliveryAmount() {
+    return getCurrentDayPurchaseOrders().stream()
+        .mapToInt(purchaseOrder -> purchaseOrder.getDeliveryCharges()).sum();
   }
 
   public static Date removeTime(Date date) {

@@ -77,7 +77,8 @@ public class OrderSummaryControllerTest {
         + "..........\n" + "Product:  Price: 15000, Name: Motorola G4, Specs: specs, Colour: Blue\n"
         + "Quantity: 3\n" + "Total Cost of Product: 45000\n"
         + "Delivery Charges for this product: 20\n" + "..........\n"
-        + "Your total amount: 45020.0\n" + "Your registered address is: Xanadu 2.0, Medina\n"
+        + "Discount on Delivery Charges: 20.0\n" + "Your total amount: 45000.0\n"
+        + "Your registered address is: Xanadu 2.0, Medina\n"
         + "Kindly pay cash to the delivery officer.\n" + "-------------\n\n\n";
 
     rafaSummary = "-------------\nDear Rafa, Here is your order summary for the day \n"
@@ -86,7 +87,7 @@ public class OrderSummaryControllerTest {
         + "Delivery Charges for this product: 20\n" + "..........\n"
         + "Product:  Price: 10000, Name: Titan W3, Colour: Gold, Type: analog\n" + "Quantity: 2\n"
         + "Total Cost of Product: 20000\n" + "Delivery Charges for this product: 30\n"
-        + "..........\n" + "Your total amount: 50050.0\n"
+        + "..........\n" + "Discount on Delivery Charges: 50.0\n" + "Your total amount: 50000.0\n"
         + "Your registered address is: Sport Residency, Mallorca\n"
         + "Kindly pay cash to the delivery officer.\n" + "-------------\n\n\n";
   }

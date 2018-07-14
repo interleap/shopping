@@ -10,9 +10,6 @@ public class OrderSummaryController {
     Customer customer = customerDao.customerById(customerId);
     double totalAmount = 0;
     String orderSummary = getSummaryHeader(customer);
-    double totalDeliveryAmount = 0;
-
-    double totalProductAmount = customer.getTotalProductAmount();
 
     for (PurchaseOrder purchaseOrder : customer.getCurrentDayPurchaseOrders()) {
       Product product = purchaseOrder.getProduct();
@@ -21,14 +18,16 @@ public class OrderSummaryController {
       orderSummary += "Quantity: " + purchaseOrder.getQuantity() + "\n";
       orderSummary += "Total Cost of Product: " + purchaseOrder.getCost() + "\n";
 
-      int currentDeliveryAmount = purchaseOrder.getDeliveryCharges();
-      if (currentDeliveryAmount > 0) {
-        orderSummary += "Delivery Charges for this product: " + currentDeliveryAmount + "\n";
-        totalDeliveryAmount += currentDeliveryAmount;
-      }
+      orderSummary +=
+          "Delivery Charges for this product: " + purchaseOrder.getDeliveryCharges() + "\n";
+
     }
-    totalAmount = totalProductAmount + totalDeliveryAmount;
+    totalAmount = customer.getTotalProductAmount() + customer.getTotalDeliveryAmount();
     orderSummary += "..........\n";
+    if (customer.getTotalProductAmount() > 5000) {
+      orderSummary += "Discount on Delivery Charges: " + customer.getTotalDeliveryAmount() + "\n";
+      totalAmount = customer.getTotalProductAmount();
+    }
     orderSummary += "Your total amount: " + totalAmount + "\n";
     orderSummary += "Your registered address is: " + customer.getAddress() + "\n";
     orderSummary += "Kindly pay cash to the delivery officer." + "\n";
