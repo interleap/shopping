@@ -1,5 +1,7 @@
 package shop.example;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -40,6 +42,16 @@ public class OrderSummaryController {
         sm += "Kindly pay cash to the delivery officer." + "\n" ;
         sm += "-------------\n\n\n";
         return sm;
+    }
+
+    public void sendInvoiceEmail(){
+        try {
+            new InvoiceEmailer().createInvoice();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Date removeTime(Date date) {
